@@ -12,12 +12,14 @@ import org.example.logic.repository.WeatherRepository
 
 class WeatherRepositoryImpl(private val client: HttpClient) : WeatherRepository {
 
+    private val json = Json { ignoreUnknownKeys = true }
+
     override suspend fun getWeatherByLocation(latitude: Double, longitude: Double): Weather? {
         val url = getBaseUrl(latitude, longitude)
         val response = client.get(url)
-        val weatherResponse = Json.decodeFromString<WeatherResponse>(response.bodyAsText())
-        val temperature  = weatherResponse.temperature
-        val weatherCode = weatherResponse.weatherCode
+        val weatherResponse = json.decodeFromString<WeatherResponse>(response.bodyAsText())
+        val temperature = weatherResponse.currentWeather.temperature
+        val weatherCode = weatherResponse.currentWeather.weatherCode
         val weatherState = weatherCode.toWeatherCondition()
         val isRaining = weatherCode in rainWeatherCodes
         return Weather(temperature, weatherState, isRaining)
@@ -29,7 +31,8 @@ class WeatherRepositoryImpl(private val client: HttpClient) : WeatherRepository 
                 "&longitude=$longitude" +
                 "&current=rain,temperature_2m,weather_code"
     }
+
     companion object {
-        private  val rainWeatherCodes: List<Int> = listOf(51, 53, 55, 61, 63, 65, 80, 81, 82)
+        private val rainWeatherCodes: List<Int> = listOf(51, 53, 55, 61, 63, 65, 80, 81, 82)
     }
 }
