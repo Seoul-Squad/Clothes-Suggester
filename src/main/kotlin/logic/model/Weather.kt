@@ -1,9 +1,8 @@
 package org.example.logic.model
 
-import kotlinx.datetime.LocalDate
 import logic.model.WeatherCondition
 
-data class WeatherData(
+data class Weather(
     val temperature: Double,
     val weatherState: WeatherCondition,
     val isRaining: Boolean,
