@@ -1,6 +1,6 @@
 package org.example.logic.repository
 import org.example.logic.model.Coordinates
 
-interface GetCoordinatesFromCityRepository {
+interface CoordinatesFromCityRepository {
     fun getCoordinatesForCity(city: String): Coordinates?
 }
