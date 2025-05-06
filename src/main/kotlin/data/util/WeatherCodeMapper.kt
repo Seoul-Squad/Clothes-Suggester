@@ -3,14 +3,21 @@ package org.example.data.util
 import logic.model.WeatherCondition
 
 object WeatherCodeMapper {
-    fun map(code: Int): WeatherCondition = when (code) {
-        in 0..1 -> WeatherCondition.CLEAR
-        in 2..3 -> WeatherCondition.CLOUDY
-        in 45..48 -> WeatherCondition.FOGGY
-        in 51..67 -> WeatherCondition.DRIZZLE
-        in 71..77 -> WeatherCondition.SNOW
-        in 80..82 -> WeatherCondition.RAIN
-        in 95..99 -> WeatherCondition.STORM
+    private val CLEAR_CODES = 0..1
+    private val CLOUDY_CODES = 2..3
+    private val FOGGY_CODES = 45..48
+    private val DRIZZLE_CODES = 51..67
+    private val SNOW_CODES = 71..77
+    private val RAIN_CODES = 80..82
+    private val STORM_CODES = 95..99
+    fun Int.toWeatherCondition(): WeatherCondition = when (this) {
+        in CLEAR_CODES -> WeatherCondition.CLEAR
+        in CLOUDY_CODES -> WeatherCondition.CLOUDY
+        in FOGGY_CODES -> WeatherCondition.FOGGY
+        in DRIZZLE_CODES -> WeatherCondition.DRIZZLE
+        in SNOW_CODES -> WeatherCondition.SNOW
+        in RAIN_CODES -> WeatherCondition.RAIN
+        in STORM_CODES -> WeatherCondition.STORM
         else -> WeatherCondition.UNKNOWN
     }
 }
