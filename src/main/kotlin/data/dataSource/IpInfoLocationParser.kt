@@ -1,8 +1,9 @@
-package org.example.data.util.locationHelper
+package org.example.data.dataSource
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.example.logic.model.Coordinates
 
 class IpInfoLocationParser : LocationParser {
     private val jsonParser = Json { ignoreUnknownKeys = true }
@@ -11,7 +12,7 @@ class IpInfoLocationParser : LocationParser {
         private const val KEY_LOCATION = "loc"
     }
 
-    override fun parse(body: String): Pair<Double, Double> {
+    override fun parse(body: String): Coordinates {
         val json = jsonParser
             .parseToJsonElement(body)
             .jsonObject
@@ -21,10 +22,11 @@ class IpInfoLocationParser : LocationParser {
             ?.content
             ?: throw IllegalStateException("Field '$KEY_LOCATION' not found in JSON response")
 
-        val (lat, lon) = locString.split(",")
+        val (latitude, longitude) = locString
+            .split(",")
             .map(String::trim)
             .map(String::toDouble)
 
-        return lat to lon
+        return Coordinates(latitude, longitude)
     }
 }
