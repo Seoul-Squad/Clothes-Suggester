@@ -1,0 +1,9 @@
+package org.example.presentation.util
+
+interface Reader {
+    fun readString(): String
+
+    fun readInt(): Int?
+
+    fun readDouble(): Double?
+}
