@@ -28,4 +28,5 @@ class CoordinatesFromCityRepositoryImpl : CoordinatesFromCityRepository {
 
         return if (lat.isNaN() || lon.isNaN()) null else Coordinates(lat, lon)
     }
+
 }
