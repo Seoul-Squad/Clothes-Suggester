@@ -10,9 +10,7 @@ import org.example.data.util.WeatherCodeMapper.toWeatherCondition
 import org.example.logic.model.Weather
 import org.example.logic.repository.WeatherRepository
 
-class WeatherRepositoryImpl(private val client: HttpClient) : WeatherRepository {
-
-    private val json = Json { ignoreUnknownKeys = true }
+class WeatherRepositoryImpl(private val client: HttpClient , private val json : Json) : WeatherRepository {
 
     override suspend fun getWeatherByLocation(latitude: Double, longitude: Double): Weather? {
         val url = getBaseUrl(latitude, longitude)
