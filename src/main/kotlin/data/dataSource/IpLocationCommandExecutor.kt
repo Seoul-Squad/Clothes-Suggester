@@ -1,4 +1,4 @@
-package org.example.data.util.locationHelper
+package org.example.data.dataSource
 
 class IpLocationCommandExecutor(
     private val cliCommand: List<String> = listOf("curl", "-s", "https://ipinfo.io/json")
