@@ -2,27 +2,25 @@ package org.example.data.repository
 
 import data.model.CurrentWeather
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import org.example.data.util.WeatherCodeMapper
-import org.example.logic.model.WeatherData
+import org.example.data.util.WeatherCodeMapper.toWeatherCondition
+import org.example.logic.model.Weather
 import org.example.logic.repository.WeatherRepository
 
-class WeatherRepositoryImpl : WeatherRepository {
-    private val client = HttpClient(CIO)
+class WeatherRepositoryImpl(private val client: HttpClient) : WeatherRepository {
 
-    override suspend fun getWeatherByLocation(latitude: Double, longitude: Double): WeatherData? {
+    override suspend fun getWeatherByLocation(latitude: Double, longitude: Double): Weather? {
         val url = getBaseUrl(latitude, longitude)
         val response = client.get(url)
         val weatherResponse = Json.decodeFromString<CurrentWeather>(response.bodyAsText())
-        val temperature = weatherResponse.current.temperature
-        val weatherCode = weatherResponse.current.weatherCode
-        val weatherState = WeatherCodeMapper.map(weatherCode)
+        val temperature  = weatherResponse.temperature
+        val weatherCode = weatherResponse.weatherCode
+        val weatherState = weatherCode.toWeatherCondition()
         val isRaining = weatherCode in rainWeatherCodes
-        return WeatherData(temperature, weatherState, isRaining)
+        return Weather(temperature, weatherState, isRaining)
     }
 
     private fun getBaseUrl(latitude: Double, longitude: Double): String {
