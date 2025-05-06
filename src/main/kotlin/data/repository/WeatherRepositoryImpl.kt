@@ -1,6 +1,6 @@
 package org.example.data.repository
 
-import data.model.CurrentWeather
+import data.model.WeatherResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -15,7 +15,7 @@ class WeatherRepositoryImpl(private val client: HttpClient) : WeatherRepository 
     override suspend fun getWeatherByLocation(latitude: Double, longitude: Double): Weather? {
         val url = getBaseUrl(latitude, longitude)
         val response = client.get(url)
-        val weatherResponse = Json.decodeFromString<CurrentWeather>(response.bodyAsText())
+        val weatherResponse = Json.decodeFromString<WeatherResponse>(response.bodyAsText())
         val temperature  = weatherResponse.temperature
         val weatherCode = weatherResponse.weatherCode
         val weatherState = weatherCode.toWeatherCondition()
