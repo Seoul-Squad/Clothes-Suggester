@@ -3,33 +3,29 @@ package org.example.data.repository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import kotlinx.serialization.Serializable
 import org.example.logic.model.Coordinates
 import org.example.logic.repository.CoordinatesFromCityRepository
-
-@Serializable
-data class GeocodingResponse(
-    val results: List<GeoResult>?
-)
-
-@Serializable
-data class GeoResult(
-    val latitude: Double,
-    val longitude: Double
-)
+import org.example.data.model.GeocodingResponse
+import kotlinx.serialization.json.Json
 
 class CoordinatesFromCityRepositoryImpl(
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val json: Json
 ) : CoordinatesFromCityRepository {
 
     override suspend fun getCoordinatesForCity(city: String): Coordinates? {
-        val baseUrl = "https://geocoding-api.open-meteo.com/v1/search"
-        val url = "$baseUrl?name=$city&count=1"
+        val url = "https://geocoding-api.open-meteo.com/v1/search?name=$city&count=1"
 
         return try {
-            val response: GeocodingResponse = client.get(url).body()
-            val result = response.results?.firstOrNull()
-            result?.let { Coordinates(it.latitude, it.longitude) }
+            val responseText = client.get(url).body<String>()
+            val response = json.decodeFromString<GeocodingResponse>(responseText)
+            val firstResult = response.results?.firstOrNull()
+
+            if (firstResult != null) {
+                Coordinates(firstResult.latitude, firstResult.longitude)
+            } else {
+                null
+            }
         } catch (e: Exception) {
             null
         }
