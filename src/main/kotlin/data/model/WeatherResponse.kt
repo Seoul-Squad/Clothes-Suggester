@@ -1,10 +1,11 @@
 package data.model
 
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.example.data.model.CurrentWeather
 
 @Serializable
 data class WeatherResponse(
-    @SerialName("temperature_2m") val temperature: Double,
-    @SerialName("weather_code")val weatherCode: Int
+    @SerialName("current")val currentWeather: CurrentWeather
 )
