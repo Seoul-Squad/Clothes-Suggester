@@ -65,7 +65,7 @@ class ConsoleUI(
         println("--- Weather Info ---")
         println("Location: ${coordinates.latitude}, ${coordinates.longitude}")
         println("Temperature: ${weather.temperature}°C")
-        println("Condition: ${weather.weatherState.description}")
+        println("weatherState: ${weather.weatherState.description}")
         println(suggestion)
         println("--------------------")
     }
