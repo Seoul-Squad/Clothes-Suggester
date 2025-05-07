@@ -3,32 +3,35 @@ package org.example.data.repository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
+import kotlinx.serialization.Serializable
 import org.example.logic.model.Coordinates
 import org.example.logic.repository.CoordinatesFromCityRepository
+
+@Serializable
+data class GeocodingResponse(
+    val results: List<GeoResult>?
+)
+
+@Serializable
+data class GeoResult(
+    val latitude: Double,
+    val longitude: Double
+)
 
 class CoordinatesFromCityRepositoryImpl(
     private val client: HttpClient
 ) : CoordinatesFromCityRepository {
 
-    override fun getCoordinatesForCity(city: String): Coordinates? = runBlocking {
-        val url = "https://geocoding-api.open-meteo.com/v1/search?name=$city&count=1"
+    override suspend fun getCoordinatesForCity(city: String): Coordinates? {
+        val baseUrl = "https://geocoding-api.open-meteo.com/v1/search"
+        val url = "$baseUrl?name=$city&count=1"
 
-        val responseText = try {
-            client.get(url).body<String>()
+        return try {
+            val response: GeocodingResponse = client.get(url).body()
+            val result = response.results?.firstOrNull()
+            result?.let { Coordinates(it.latitude, it.longitude) }
         } catch (e: Exception) {
-            return@runBlocking null
+            null
         }
-
-        val json = JSONObject(responseText)
-        val results = json.optJSONArray("results") ?: return@runBlocking null
-        if (results.length() == 0) return@runBlocking null
-
-        val locationObject = results.getJSONObject(0)
-        val lat = locationObject.optDouble("latitude", Double.NaN)
-        val lon = locationObject.optDouble("longitude", Double.NaN)
-
-        return@runBlocking if (lat.isNaN() || lon.isNaN()) null else Coordinates(lat, lon)
     }
 }
