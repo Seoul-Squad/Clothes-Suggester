@@ -55,15 +55,15 @@ class ConsoleUI(
         displayWeather(coordinates)
     }
 
-    private suspend fun displayWeather(coords: Coordinates) {
-        val weather: Weather? = weatherUseCase(coords.latitude, coords.longitude)
+    private suspend fun displayWeather(coordinates: Coordinates) {
+        val weather: Weather? = weatherUseCase(coordinates.latitude, coordinates.longitude)
         if (weather == null) {
             println("Failed to fetch weather.")
             return
         }
         val suggestion = suggestionUseCase(weather)
         println("--- Weather Info ---")
-        println("Location: ${coords.latitude}, ${coords.longitude}")
+        println("Location: ${coordinates.latitude}, ${coordinates.longitude}")
         println("Temperature: ${weather.temperature}°C")
         println("Condition: ${weather.weatherState.description}")
         println(suggestion)
