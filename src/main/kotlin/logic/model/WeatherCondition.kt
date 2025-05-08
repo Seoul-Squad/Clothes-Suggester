@@ -7,5 +7,4 @@ enum class WeatherCondition(val description: String) {
     SNOW("Snow"),
     RAIN("Rain"),
     STORM("Storm"),
-    UNKNOWN("Unknown")
 }
