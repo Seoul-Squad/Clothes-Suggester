@@ -13,13 +13,13 @@ import org.example.data.util.Constants.BASE_URL
 class WeatherRepositoryImpl(private val client: HttpClient , private val json : Json) : WeatherRepository {
 
     override suspend fun getWeatherByLocation(latitude: Double, longitude: Double): Weather {
-        val url = getBaseUrl(latitude, longitude)
+        val url = getAPIUrl(latitude, longitude)
         val response = client.get(url)
         val weatherResponse = json.decodeFromString<WeatherResponse>(response.bodyAsText())
         return weatherResponse.toWeather(weatherResponse)
     }
 
-    private fun getBaseUrl(latitude: Double, longitude: Double): String {
+    private fun getAPIUrl (latitude: Double, longitude: Double): String {
         return "$BASE_URL?latitude=$latitude&longitude=$longitude&current=rain,temperature_2m,weather_code"
     }
 }
