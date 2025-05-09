@@ -1,7 +1,7 @@
 package org.example
 
 import kotlinx.coroutines.runBlocking
-import org.example.di.appModule
+import org.example.di.appModules
 import org.example.presentation.ConsoleUI
 import org.koin.core.context.startKoin
 import org.koin.java.KoinJavaComponent.getKoin
@@ -10,7 +10,8 @@ import org.koin.java.KoinJavaComponent.getKoin
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
     startKoin {
-        modules(appModule)
+        printLogger()
+        modules(appModules)
     }
     val consoleUI: ConsoleUI = getKoin().get()
     runBlocking {
