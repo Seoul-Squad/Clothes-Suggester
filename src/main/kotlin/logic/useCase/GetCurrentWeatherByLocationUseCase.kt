@@ -7,7 +7,7 @@ import org.example.logic.repository.WeatherRepository
 class GetCurrentWeatherByLocationUseCase(
     private val weatherRepository: WeatherRepository,
 ) {
-    suspend operator fun invoke(let: Double,lon: Double): Weather? {
-        return weatherRepository.getWeatherByLocation(let,lon)
+    suspend operator fun invoke(latitude: Double,longitude: Double): Weather {
+        return weatherRepository.getWeatherByLocation(latitude,longitude)
     }
 }

@@ -13,7 +13,6 @@ import org.example.data.repository.WeatherRepositoryImpl
 import org.example.logic.repository.CoordinatesFromCityRepository
 import org.example.logic.repository.LocationRepository
 import org.example.logic.repository.WeatherRepository
-import org.example.logic.useCase.ClothingSuggestionUseCase
 import org.example.logic.useCase.CoordinatesFromCityUseCase
 import org.example.logic.useCase.GetCurrentLocationUseCase
 import org.example.logic.useCase.GetCurrentWeatherByLocationUseCase
@@ -41,7 +40,6 @@ val appModule = module {
     single { GetCurrentLocationUseCase(get()) }
     single { CoordinatesFromCityUseCase(get()) }
     single { GetCurrentWeatherByLocationUseCase(get()) }
-    single { ClothingSuggestionUseCase() }
 
     single<Viewer> { ConsoleViewer() }
     single<Reader> { ConsoleReader() }
