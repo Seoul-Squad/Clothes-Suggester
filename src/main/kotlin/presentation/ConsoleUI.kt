@@ -3,7 +3,7 @@ package org.example.presentation
 import org.example.logic.model.Coordinates
 import org.example.logic.model.Weather
 import org.example.logic.useCase.ClothingSuggestionUseCase
-import org.example.logic.useCase.CoordinatesFromCityUseCase
+import org.example.logic.useCase.GetCoordinatesFromCityNameUseCase
 import org.example.logic.useCase.GetCurrentLocationUseCase
 import org.example.logic.useCase.GetCurrentWeatherByLocationUseCase
 import org.example.presentation.util.Reader
@@ -11,7 +11,7 @@ import org.example.presentation.util.Viewer
 
 class ConsoleUI(
     private val getCurrentLocationUseCase: GetCurrentLocationUseCase,
-    private val coordinatesFromCityUseCase: CoordinatesFromCityUseCase,
+    private val getCoordinatesFromCityNameUseCase: GetCoordinatesFromCityNameUseCase,
     private val weatherUseCase: GetCurrentWeatherByLocationUseCase,
     private val suggestionUseCase: ClothingSuggestionUseCase,
     private val viewer: Viewer,
@@ -47,7 +47,7 @@ class ConsoleUI(
     private suspend fun showCityWeather() {
         print("Enter city name: ")
         val city = reader.readString().trim()
-        val coordinates: Coordinates? = coordinatesFromCityUseCase(city)
+        val coordinates: Coordinates? = getCoordinatesFromCityNameUseCase(city)
         if (coordinates == null) {
             println("Could not find coordinates for '$city'")
             return
